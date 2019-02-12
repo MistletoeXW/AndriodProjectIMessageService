@@ -1,5 +1,6 @@
 package com.example.demo.model.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class User {
@@ -23,9 +24,9 @@ public class User {
 
     private String pushid;
 
-    private Date createat;
+    private LocalDateTime createTime = LocalDateTime.now();
 
-    private Date updateat;
+    private LocalDateTime updateTime = LocalDateTime.now();
 
     public String getId() {
         return id;
@@ -107,19 +108,19 @@ public class User {
         this.pushid = pushid == null ? null : pushid.trim();
     }
 
-    public Date getCreateat() {
-        return createat;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateat(Date createat) {
-        this.createat = createat;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdateat() {
-        return updateat;
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdateat(Date updateat) {
-        this.updateat = updateat;
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 }

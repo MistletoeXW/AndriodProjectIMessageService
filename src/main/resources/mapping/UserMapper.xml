@@ -12,8 +12,8 @@
     <result column="token" property="token" jdbcType="VARCHAR" />
     <result column="lastReceivedAt" property="lastreceivedat" jdbcType="TIMESTAMP" />
     <result column="pushId" property="pushid" jdbcType="VARCHAR" />
-    <result column="createAt" property="createat" jdbcType="TIMESTAMP" />
-    <result column="updateAt" property="updateat" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, name, password, phone, sex, description, portrait, token, lastReceivedAt, pushId, 
-    createAt, updateAt
+    create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.demo.model.entity.UserExample" >
     select
@@ -112,15 +112,15 @@
     <selectKey keyProperty="id" resultType="string" order="BEFORE">
       select replace(uuid(), '-', '') as id from dual
     </selectKey>
-    insert into tb_user (id, name, password, 
+    insert into tb_user (id, name, password,
       phone, sex, description, 
       portrait, token, lastReceivedAt, 
-      pushId, createAt, updateAt
+      pushId, create_time, update_time
       )
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
       #{portrait,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, #{lastreceivedat,jdbcType=TIMESTAMP}, 
-      #{pushid,jdbcType=VARCHAR}, #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP}
+      #{pushid,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.User" >
@@ -159,11 +159,11 @@
       <if test="pushid != null" >
         pushId,
       </if>
-      <if test="createat != null" >
-        createAt,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="updateat != null" >
-        updateAt,
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -197,11 +197,11 @@
       <if test="pushid != null" >
         #{pushid,jdbcType=VARCHAR},
       </if>
-      <if test="createat != null" >
-        #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -244,11 +244,11 @@
       <if test="record.pushid != null" >
         pushId = #{record.pushid,jdbcType=VARCHAR},
       </if>
-      <if test="record.createat != null" >
-        createAt = #{record.createat,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateat != null" >
-        updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -267,8 +267,8 @@
       token = #{record.token,jdbcType=VARCHAR},
       lastReceivedAt = #{record.lastreceivedat,jdbcType=TIMESTAMP},
       pushId = #{record.pushid,jdbcType=VARCHAR},
-      createAt = #{record.createat,jdbcType=TIMESTAMP},
-      updateAt = #{record.updateat,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -303,11 +303,11 @@
       <if test="pushid != null" >
         pushId = #{pushid,jdbcType=VARCHAR},
       </if>
-      <if test="createat != null" >
-        createAt = #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        updateAt = #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -323,8 +323,8 @@
       token = #{token,jdbcType=VARCHAR},
       lastReceivedAt = #{lastreceivedat,jdbcType=TIMESTAMP},
       pushId = #{pushid,jdbcType=VARCHAR},
-      createAt = #{createat,jdbcType=TIMESTAMP},
-      updateAt = #{updateat,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

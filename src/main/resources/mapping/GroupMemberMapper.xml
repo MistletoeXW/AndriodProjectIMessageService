@@ -8,8 +8,8 @@
     <result column="userId" property="userid" jdbcType="VARCHAR" />
     <result column="notifyLevel" property="notifylevel" jdbcType="INTEGER" />
     <result column="permissionType" property="permissiontype" jdbcType="INTEGER" />
-    <result column="createAt" property="createat" jdbcType="TIMESTAMP" />
-    <result column="updateAt" property="updateat" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, alias, groupId, userId, notifyLevel, permissionType, createAt, updateAt
+    id, alias, groupId, userId, notifyLevel, permissionType, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.demo.model.entity.GroupMemberExample" >
     select
@@ -109,10 +109,10 @@
     </selectKey>
     insert into tb_group_member (id, alias, groupId,
       userId, notifyLevel, permissionType, 
-      createAt, updateAt)
+      create_time, update_time)
     values (#{id,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, #{groupid,jdbcType=VARCHAR}, 
       #{userid,jdbcType=VARCHAR}, #{notifylevel,jdbcType=INTEGER}, #{permissiontype,jdbcType=INTEGER}, 
-      #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.GroupMember" >
     <selectKey keyProperty="id" resultType="string" order="BEFORE">
@@ -138,11 +138,11 @@
       <if test="permissiontype != null" >
         permissionType,
       </if>
-      <if test="createat != null" >
-        createAt,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="updateat != null" >
-        updateAt,
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -164,11 +164,11 @@
       <if test="permissiontype != null" >
         #{permissiontype,jdbcType=INTEGER},
       </if>
-      <if test="createat != null" >
-        #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -199,11 +199,11 @@
       <if test="record.permissiontype != null" >
         permissionType = #{record.permissiontype,jdbcType=INTEGER},
       </if>
-      <if test="record.createat != null" >
-        createAt = #{record.createat,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateat != null" >
-        updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -218,8 +218,8 @@
       userId = #{record.userid,jdbcType=VARCHAR},
       notifyLevel = #{record.notifylevel,jdbcType=INTEGER},
       permissionType = #{record.permissiontype,jdbcType=INTEGER},
-      createAt = #{record.createat,jdbcType=TIMESTAMP},
-      updateAt = #{record.updateat,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,11 +242,11 @@
       <if test="permissiontype != null" >
         permissionType = #{permissiontype,jdbcType=INTEGER},
       </if>
-      <if test="createat != null" >
-        createAt = #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        updateAt = #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -258,8 +258,8 @@
       userId = #{userid,jdbcType=VARCHAR},
       notifyLevel = #{notifylevel,jdbcType=INTEGER},
       permissionType = #{permissiontype,jdbcType=INTEGER},
-      createAt = #{createat,jdbcType=TIMESTAMP},
-      updateAt = #{updateat,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

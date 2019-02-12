@@ -8,8 +8,8 @@
     <result column="senderId" property="senderid" jdbcType="VARCHAR" />
     <result column="entityType" property="entitytype" jdbcType="INTEGER" />
     <result column="arrivalAt" property="arrivalat" jdbcType="TIMESTAMP" />
-    <result column="createAt" property="createat" jdbcType="TIMESTAMP" />
-    <result column="updateAt" property="updateat" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.demo.model.entity.PushHistory" extends="BaseResultMap" >
     <result column="entity" property="entity" jdbcType="LONGVARBINARY" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, receiverId, receiverPushId, senderId, entityType, arrivalAt, createAt, updateAt
+    id, receiverId, receiverPushId, senderId, entityType, arrivalAt, create_time, update_time
   </sql>
   <sql id="Blob_Column_List" >
     entity
@@ -134,11 +134,11 @@
     </selectKey>
     insert into tb_push_history (id, receiverId, receiverPushId,
       senderId, entityType, arrivalAt, 
-      createAt, updateAt, entity
+      create_time, update_time, entity
       )
     values (#{id,jdbcType=VARCHAR}, #{receiverid,jdbcType=VARCHAR}, #{receiverpushid,jdbcType=VARCHAR}, 
       #{senderid,jdbcType=VARCHAR}, #{entitytype,jdbcType=INTEGER}, #{arrivalat,jdbcType=TIMESTAMP}, 
-      #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP}, #{entity,jdbcType=LONGVARBINARY}
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{entity,jdbcType=LONGVARBINARY}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.PushHistory" >
@@ -165,11 +165,11 @@
       <if test="arrivalat != null" >
         arrivalAt,
       </if>
-      <if test="createat != null" >
-        createAt,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="updateat != null" >
-        updateAt,
+      <if test="updateTime != null" >
+        update_time,
       </if>
       <if test="entity != null" >
         entity,
@@ -194,11 +194,11 @@
       <if test="arrivalat != null" >
         #{arrivalat,jdbcType=TIMESTAMP},
       </if>
-      <if test="createat != null" >
-        #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="entity != null" >
         #{entity,jdbcType=LONGVARBINARY},
@@ -232,11 +232,11 @@
       <if test="record.arrivalat != null" >
         arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createat != null" >
-        createAt = #{record.createat,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateat != null" >
-        updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.entity != null" >
         entity = #{record.entity,jdbcType=LONGVARBINARY},
@@ -254,8 +254,8 @@
       senderId = #{record.senderid,jdbcType=VARCHAR},
       entityType = #{record.entitytype,jdbcType=INTEGER},
       arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
-      createAt = #{record.createat,jdbcType=TIMESTAMP},
-      updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       entity = #{record.entity,jdbcType=LONGVARBINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -269,8 +269,8 @@
       senderId = #{record.senderid,jdbcType=VARCHAR},
       entityType = #{record.entitytype,jdbcType=INTEGER},
       arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
-      createAt = #{record.createat,jdbcType=TIMESTAMP},
-      updateAt = #{record.updateat,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -293,11 +293,11 @@
       <if test="arrivalat != null" >
         arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
       </if>
-      <if test="createat != null" >
-        createAt = #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        updateAt = #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="entity != null" >
         entity = #{entity,jdbcType=LONGVARBINARY},
@@ -312,8 +312,8 @@
       senderId = #{senderid,jdbcType=VARCHAR},
       entityType = #{entitytype,jdbcType=INTEGER},
       arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
-      createAt = #{createat,jdbcType=TIMESTAMP},
-      updateAt = #{updateat,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       entity = #{entity,jdbcType=LONGVARBINARY}
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -324,8 +324,8 @@
       senderId = #{senderid,jdbcType=VARCHAR},
       entityType = #{entitytype,jdbcType=INTEGER},
       arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
-      createAt = #{createat,jdbcType=TIMESTAMP},
-      updateAt = #{updateat,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

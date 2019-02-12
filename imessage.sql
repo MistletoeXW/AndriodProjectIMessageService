@@ -1,5 +1,3 @@
-CREATE DATABASE imessage DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-
 create table TB_USER(
   id varchar(255) primary key comment '使用uuid',
   name varchar(128) comment '用户名',
@@ -11,8 +9,8 @@ create table TB_USER(
   token varchar(255) comment '令牌token',
   lastReceivedAt datetime comment '最后收到消息时间',
   pushId varchar(255) comment '设备Id',
-  createAt datetime comment '创建时间',
-  updateAt datetime comment '更新时间'
+  createAt datetime DEFAULT CURRENT_TIMESTAMP comment '创建时间' ,
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
 );
 
 create table TB_USER_FOLLOW(
@@ -20,8 +18,8 @@ create table TB_USER_FOLLOW(
   alias varchar(255) comment '别名',
   originId varchar(255) comment '关注人Id',
   targetId varchar(255) comment '关注人的Id',
-  createAt datetime comment '创建时间',
-  updateAt datetime comment '更新时间'
+  createAt datetime DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
 );
 
 create table TB_MESSAGE(
@@ -32,8 +30,8 @@ create table TB_MESSAGE(
   receiverId varchar(255) comment '接收人Id',
   senderId varchar(255) comment '发送人Id' not null ,
   type int(11) comment '消息的类型',
-  createdAt datetime comment '创建时间',
-  updatedAt datetime comment '更新时间'
+  createdAt datetime DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  updatedAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
 );
 
 create table TB_GROUP(
@@ -42,8 +40,8 @@ create table TB_GROUP(
   deacription varchar(255) comment '群描述',
   picture varchar(255) comment '群头像',
   ownerId varchar(255) comment '群组创建者',
-  createAt datetime comment '创建时间',
-  updateAt datetime comment '更新时间'
+  createAt datetime DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
 );
 
 create table TB_GROUP_MEMBER(
@@ -53,8 +51,8 @@ create table TB_GROUP_MEMBER(
   userId varchar(255) comment '用户Id',
   notifyLevel int(11) comment '消息通知级别',
   permissionType int(11) comment '权限级别',
-  createAt datetime comment '创建时间',
-  updateAt datetime comment '更新时间'
+  createAt datetime DEFAULT CURRENT_TIMESTAMP comment '创建时间',
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP comment '更新时间'
 );
 
 create table TB_APPLY(
@@ -64,8 +62,8 @@ create table TB_APPLY(
   type int(11) comment '区分是申请添加用户还是群',
   description varchar(255) comment '申请添加说明',
   alias varchar(255) comment '附件',
-  createAt datetime,
-  updateAt datetime
+  createAt datetime DEFAULT CURRENT_TIMESTAMP,
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
 
 create table TB_PUSH_HISTORY(
@@ -76,6 +74,11 @@ create table TB_PUSH_HISTORY(
   entity BLOB comment '存储消息模型',
   entityType int(11) comment '实体类型',
   arrivalAt datetime comment '到达时间',
-  createAt datetime,
-  updateAt datetime
+  createAt datetime DEFAULT CURRENT_TIMESTAMP,
+  updateAt datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 );
+
+ALTER TABLE tb_user_follow
+  ADD COLUMN create_time timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  ADD COLUMN update_time timestamp NULL DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP AFTER create_time;

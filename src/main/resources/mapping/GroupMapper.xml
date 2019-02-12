@@ -7,8 +7,8 @@
     <result column="deacription" property="deacription" jdbcType="VARCHAR" />
     <result column="picture" property="picture" jdbcType="VARCHAR" />
     <result column="ownerId" property="ownerid" jdbcType="VARCHAR" />
-    <result column="createAt" property="createat" jdbcType="TIMESTAMP" />
-    <result column="updateAt" property="updateat" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, deacription, picture, ownerId, createAt, updateAt
+    id, name, deacription, picture, ownerId, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.demo.model.entity.GroupExample" >
     select
@@ -107,11 +107,11 @@
       select replace(uuid(), '-', '') as id from dual
     </selectKey>
     insert into tb_group (id, name, deacription,
-      picture, ownerId, createAt, 
-      updateAt)
+      picture, ownerId, create_time, 
+      update_time)
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{deacription,jdbcType=VARCHAR}, 
-      #{picture,jdbcType=VARCHAR}, #{ownerid,jdbcType=VARCHAR}, #{createat,jdbcType=TIMESTAMP}, 
-      #{updateat,jdbcType=TIMESTAMP})
+      #{picture,jdbcType=VARCHAR}, #{ownerid,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.Group" >
     <selectKey keyProperty="id" resultType="string" order="BEFORE">
@@ -134,11 +134,11 @@
       <if test="ownerid != null" >
         ownerId,
       </if>
-      <if test="createat != null" >
-        createAt,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="updateat != null" >
-        updateAt,
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -157,11 +157,11 @@
       <if test="ownerid != null" >
         #{ownerid,jdbcType=VARCHAR},
       </if>
-      <if test="createat != null" >
-        #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -189,11 +189,11 @@
       <if test="record.ownerid != null" >
         ownerId = #{record.ownerid,jdbcType=VARCHAR},
       </if>
-      <if test="record.createat != null" >
-        createAt = #{record.createat,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateat != null" >
-        updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -207,8 +207,8 @@
       deacription = #{record.deacription,jdbcType=VARCHAR},
       picture = #{record.picture,jdbcType=VARCHAR},
       ownerId = #{record.ownerid,jdbcType=VARCHAR},
-      createAt = #{record.createat,jdbcType=TIMESTAMP},
-      updateAt = #{record.updateat,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -228,11 +228,11 @@
       <if test="ownerid != null" >
         ownerId = #{ownerid,jdbcType=VARCHAR},
       </if>
-      <if test="createat != null" >
-        createAt = #{createat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateat != null" >
-        updateAt = #{updateat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -243,8 +243,8 @@
       deacription = #{deacription,jdbcType=VARCHAR},
       picture = #{picture,jdbcType=VARCHAR},
       ownerId = #{ownerid,jdbcType=VARCHAR},
-      createAt = #{createat,jdbcType=TIMESTAMP},
-      updateAt = #{updateat,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

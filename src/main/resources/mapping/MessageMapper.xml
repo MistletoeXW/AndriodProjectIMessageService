@@ -8,8 +8,8 @@
     <result column="receiverId" property="receiverid" jdbcType="VARCHAR" />
     <result column="senderId" property="senderid" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="createdAt" property="createdat" jdbcType="TIMESTAMP" />
-    <result column="updatedAt" property="updatedat" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.example.demo.model.entity.Message" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, attach, groupId, receiverId, senderId, type, createdAt, updatedAt
+    id, attach, groupId, receiverId, senderId, type, create_time, update_time
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -134,11 +134,11 @@
     </selectKey>
     insert into tb_message (id, attach, groupId,
       receiverId, senderId, type, 
-      createdAt, updatedAt, content
+      create_time, update_time, content
       )
     values (#{id,jdbcType=VARCHAR}, #{attach,jdbcType=VARCHAR}, #{groupid,jdbcType=VARCHAR}, 
       #{receiverid,jdbcType=VARCHAR}, #{senderid,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
-      #{createdat,jdbcType=TIMESTAMP}, #{updatedat,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.Message" >
@@ -165,11 +165,11 @@
       <if test="type != null" >
         type,
       </if>
-      <if test="createdat != null" >
-        createdAt,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="updatedat != null" >
-        updatedAt,
+      <if test="updateTime != null" >
+        update_time,
       </if>
       <if test="content != null" >
         content,
@@ -194,11 +194,11 @@
       <if test="type != null" >
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="createdat != null" >
-        #{createdat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedat != null" >
-        #{updatedat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -232,11 +232,11 @@
       <if test="record.type != null" >
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.createdat != null" >
-        createdAt = #{record.createdat,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedat != null" >
-        updatedAt = #{record.updatedat,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null" >
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -254,8 +254,8 @@
       receiverId = #{record.receiverid,jdbcType=VARCHAR},
       senderId = #{record.senderid,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
-      createdAt = #{record.createdat,jdbcType=TIMESTAMP},
-      updatedAt = #{record.updatedat,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -269,8 +269,8 @@
       receiverId = #{record.receiverid,jdbcType=VARCHAR},
       senderId = #{record.senderid,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
-      createdAt = #{record.createdat,jdbcType=TIMESTAMP},
-      updatedAt = #{record.updatedat,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -293,11 +293,11 @@
       <if test="type != null" >
         type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="createdat != null" >
-        createdAt = #{createdat,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedat != null" >
-        updatedAt = #{updatedat,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -312,8 +312,8 @@
       receiverId = #{receiverid,jdbcType=VARCHAR},
       senderId = #{senderid,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
-      createdAt = #{createdat,jdbcType=TIMESTAMP},
-      updatedAt = #{updatedat,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -324,8 +324,8 @@
       receiverId = #{receiverid,jdbcType=VARCHAR},
       senderId = #{senderid,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
-      createdAt = #{createdat,jdbcType=TIMESTAMP},
-      updatedAt = #{updatedat,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

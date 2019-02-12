@@ -1,6 +1,6 @@
 package com.example.demo.model.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Message {
     private String id;
@@ -15,9 +15,9 @@ public class Message {
 
     private Integer type;
 
-    private Date createdat;
+    private LocalDateTime createTime = LocalDateTime.now();
 
-    private Date updatedat;
+    private LocalDateTime updateTime = LocalDateTime.now();
 
     private String content;
 
@@ -69,20 +69,20 @@ public class Message {
         this.type = type;
     }
 
-    public Date getCreatedat() {
-        return createdat;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatedat(Date createdat) {
-        this.createdat = createdat;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdatedat() {
-        return updatedat;
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatedat(Date updatedat) {
-        this.updatedat = updatedat;
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getContent() {
