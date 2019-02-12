@@ -3,6 +3,7 @@ package com.example.demo.model.entity;
 import java.util.Date;
 
 public class Apply {
+
     private String id;
 
     private String applicationid;

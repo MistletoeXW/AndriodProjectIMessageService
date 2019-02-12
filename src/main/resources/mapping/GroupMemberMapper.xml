@@ -104,7 +104,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.GroupMember" >
-    insert into tb_group_member (id, alias, groupId, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_group_member (id, alias, groupId,
       userId, notifyLevel, permissionType, 
       createAt, updateAt)
     values (#{id,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, #{groupid,jdbcType=VARCHAR}, 
@@ -112,6 +115,9 @@
       #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.GroupMember" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_group_member
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

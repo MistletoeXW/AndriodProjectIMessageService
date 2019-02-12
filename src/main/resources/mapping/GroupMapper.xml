@@ -103,7 +103,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.Group" >
-    insert into tb_group (id, name, deacription, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_group (id, name, deacription,
       picture, ownerId, createAt, 
       updateAt)
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{deacription,jdbcType=VARCHAR}, 
@@ -111,6 +114,9 @@
       #{updateat,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.Group" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_group
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -129,7 +129,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.Message" >
-    insert into tb_message (id, attach, groupId, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_message (id, attach, groupId,
       receiverId, senderId, type, 
       createdAt, updatedAt, content
       )
@@ -139,6 +142,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.Message" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_message
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

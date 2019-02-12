@@ -102,7 +102,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.UserFollow" >
-    insert into tb_user_follow (id, alias, originId, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_user_follow (id, alias, originId,
       targetId, createAt, updateAt
       )
     values (#{id,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, #{originid,jdbcType=VARCHAR}, 
@@ -110,6 +113,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.UserFollow" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_user_follow
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

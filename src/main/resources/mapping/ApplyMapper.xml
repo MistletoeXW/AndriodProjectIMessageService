@@ -104,7 +104,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.Apply" >
-    insert into tb_apply (id, applicationId, targetId, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_apply (id, applicationId, targetId,
       type, description, alias, 
       createAt, updateAt)
     values (#{id,jdbcType=VARCHAR}, #{applicationid,jdbcType=VARCHAR}, #{targetid,jdbcType=VARCHAR}, 
@@ -112,6 +115,9 @@
       #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.Apply" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_apply
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -109,6 +109,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.User" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_user (id, name, password, 
       phone, sex, description, 
       portrait, token, lastReceivedAt, 
@@ -121,6 +124,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.User" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

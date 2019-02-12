@@ -129,7 +129,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.demo.model.entity.PushHistory" >
-    insert into tb_push_history (id, receiverId, receiverPushId, 
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
+    insert into tb_push_history (id, receiverId, receiverPushId,
       senderId, entityType, arrivalAt, 
       createAt, updateAt, entity
       )
@@ -139,6 +142,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.model.entity.PushHistory" >
+    <selectKey keyProperty="id" resultType="string" order="BEFORE">
+      select replace(uuid(), '-', '') as id from dual
+    </selectKey>
     insert into tb_push_history
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
