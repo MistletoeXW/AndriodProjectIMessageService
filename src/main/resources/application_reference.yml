@@ -1,0 +1,26 @@
+############################################################
+##### 请配置好数据库password 再建一个application.yml#####
+############################################################
+
+
+server:
+  servlet:
+    context-path: /api
+  port: 8081
+
+spring:
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: xxxxx
+    password: xxxxx
+    url: jdbc:mysql://xxxxxx:3306/xxxxx?characterEncoding=utf-8&useSSL=true
+
+  devtools:
+    restart:
+      additional-paths: src/main/java #设置热部署重启目录
+      enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.example.demo.model.entity

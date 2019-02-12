@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.PushHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.entity.PushHistory" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="receiverId" property="receiverid" jdbcType="VARCHAR" />
+    <result column="receiverPushId" property="receiverpushid" jdbcType="VARCHAR" />
+    <result column="senderId" property="senderid" jdbcType="VARCHAR" />
+    <result column="entityType" property="entitytype" jdbcType="INTEGER" />
+    <result column="arrivalAt" property="arrivalat" jdbcType="TIMESTAMP" />
+    <result column="createAt" property="createat" jdbcType="TIMESTAMP" />
+    <result column="updateAt" property="updateat" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.example.demo.model.entity.PushHistory" extends="BaseResultMap" >
+    <result column="entity" property="entity" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, receiverId, receiverPushId, senderId, entityType, arrivalAt, createAt, updateAt
+  </sql>
+  <sql id="Blob_Column_List" >
+    entity
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.example.demo.model.entity.PushHistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_push_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.demo.model.entity.PushHistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from tb_push_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_push_history
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_push_history
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo.model.entity.PushHistoryExample" >
+    delete from tb_push_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.entity.PushHistory" >
+    insert into tb_push_history (id, receiverId, receiverPushId, 
+      senderId, entityType, arrivalAt, 
+      createAt, updateAt, entity
+      )
+    values (#{id,jdbcType=VARCHAR}, #{receiverid,jdbcType=VARCHAR}, #{receiverpushid,jdbcType=VARCHAR}, 
+      #{senderid,jdbcType=VARCHAR}, #{entitytype,jdbcType=INTEGER}, #{arrivalat,jdbcType=TIMESTAMP}, 
+      #{createat,jdbcType=TIMESTAMP}, #{updateat,jdbcType=TIMESTAMP}, #{entity,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.entity.PushHistory" >
+    insert into tb_push_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="receiverid != null" >
+        receiverId,
+      </if>
+      <if test="receiverpushid != null" >
+        receiverPushId,
+      </if>
+      <if test="senderid != null" >
+        senderId,
+      </if>
+      <if test="entitytype != null" >
+        entityType,
+      </if>
+      <if test="arrivalat != null" >
+        arrivalAt,
+      </if>
+      <if test="createat != null" >
+        createAt,
+      </if>
+      <if test="updateat != null" >
+        updateAt,
+      </if>
+      <if test="entity != null" >
+        entity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverid != null" >
+        #{receiverid,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverpushid != null" >
+        #{receiverpushid,jdbcType=VARCHAR},
+      </if>
+      <if test="senderid != null" >
+        #{senderid,jdbcType=VARCHAR},
+      </if>
+      <if test="entitytype != null" >
+        #{entitytype,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalat != null" >
+        #{arrivalat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createat != null" >
+        #{createat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateat != null" >
+        #{updateat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity != null" >
+        #{entity,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo.model.entity.PushHistoryExample" resultType="java.lang.Integer" >
+    select count(*) from tb_push_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_push_history
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiverid != null" >
+        receiverId = #{record.receiverid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiverpushid != null" >
+        receiverPushId = #{record.receiverpushid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.senderid != null" >
+        senderId = #{record.senderid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entitytype != null" >
+        entityType = #{record.entitytype,jdbcType=INTEGER},
+      </if>
+      <if test="record.arrivalat != null" >
+        arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createat != null" >
+        createAt = #{record.createat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateat != null" >
+        updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.entity != null" >
+        entity = #{record.entity,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update tb_push_history
+    set id = #{record.id,jdbcType=VARCHAR},
+      receiverId = #{record.receiverid,jdbcType=VARCHAR},
+      receiverPushId = #{record.receiverpushid,jdbcType=VARCHAR},
+      senderId = #{record.senderid,jdbcType=VARCHAR},
+      entityType = #{record.entitytype,jdbcType=INTEGER},
+      arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
+      createAt = #{record.createat,jdbcType=TIMESTAMP},
+      updateAt = #{record.updateat,jdbcType=TIMESTAMP},
+      entity = #{record.entity,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_push_history
+    set id = #{record.id,jdbcType=VARCHAR},
+      receiverId = #{record.receiverid,jdbcType=VARCHAR},
+      receiverPushId = #{record.receiverpushid,jdbcType=VARCHAR},
+      senderId = #{record.senderid,jdbcType=VARCHAR},
+      entityType = #{record.entitytype,jdbcType=INTEGER},
+      arrivalAt = #{record.arrivalat,jdbcType=TIMESTAMP},
+      createAt = #{record.createat,jdbcType=TIMESTAMP},
+      updateAt = #{record.updateat,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.entity.PushHistory" >
+    update tb_push_history
+    <set >
+      <if test="receiverid != null" >
+        receiverId = #{receiverid,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverpushid != null" >
+        receiverPushId = #{receiverpushid,jdbcType=VARCHAR},
+      </if>
+      <if test="senderid != null" >
+        senderId = #{senderid,jdbcType=VARCHAR},
+      </if>
+      <if test="entitytype != null" >
+        entityType = #{entitytype,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalat != null" >
+        arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createat != null" >
+        createAt = #{createat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateat != null" >
+        updateAt = #{updateat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity != null" >
+        entity = #{entity,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.demo.model.entity.PushHistory" >
+    update tb_push_history
+    set receiverId = #{receiverid,jdbcType=VARCHAR},
+      receiverPushId = #{receiverpushid,jdbcType=VARCHAR},
+      senderId = #{senderid,jdbcType=VARCHAR},
+      entityType = #{entitytype,jdbcType=INTEGER},
+      arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
+      createAt = #{createat,jdbcType=TIMESTAMP},
+      updateAt = #{updateat,jdbcType=TIMESTAMP},
+      entity = #{entity,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.entity.PushHistory" >
+    update tb_push_history
+    set receiverId = #{receiverid,jdbcType=VARCHAR},
+      receiverPushId = #{receiverpushid,jdbcType=VARCHAR},
+      senderId = #{senderid,jdbcType=VARCHAR},
+      entityType = #{entitytype,jdbcType=INTEGER},
+      arrivalAt = #{arrivalat,jdbcType=TIMESTAMP},
+      createAt = #{createat,jdbcType=TIMESTAMP},
+      updateAt = #{updateat,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
