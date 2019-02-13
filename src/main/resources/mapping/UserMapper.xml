@@ -92,6 +92,14 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select *
+    from tb_user
+    where LOWER(name) like "%" #{name,jdbcType=VARCHAR} "%"
+    order by length(name)
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

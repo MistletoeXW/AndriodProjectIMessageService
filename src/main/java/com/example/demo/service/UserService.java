@@ -5,7 +5,6 @@ import com.example.demo.dao.UserMapper;
 import com.example.demo.model.ConstCorrespond;
 import com.example.demo.model.Result;
 import com.example.demo.model.entity.User;
-import com.example.demo.model.entity.UserExample;
 import com.example.demo.model.entity.UserFollow;
 import com.example.demo.model.entity.UserFollowExample;
 import com.example.demo.model.requestJson.LoginInfo;
@@ -213,11 +212,12 @@ public class UserService {
             userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
             userCard.setDescription(user.getDescription());
             userCard.setPortrait(user.getPortrait());
+            //判断是否已经关注
             if(juadeIsFollow(userId,user.getId()) != 0)
                 userCard.setIfFollow(1);
             else
                 userCard.setIfFollow(0);
-            return ResultTool.success(user);
+            return ResultTool.success(userCard);
         }catch (Exception e){
             return ResultTool.error("查询失败，服务器异常！");
         }
@@ -228,10 +228,7 @@ public class UserService {
      */
     public Result UserInfoByName(String id, String name){
         try{
-            UserExample example = new UserExample();
-            example.createCriteria()
-                    .andNameEqualTo(name);
-            List<User> userList = userMapper.selectByExample(example);
+            List<User> userList = userMapper.selectByName(name);
             if (userList == null)
                 return ResultTool.error("没有此用户！");
             List<UserCard> userCardList = new ArrayList<>();
@@ -243,6 +240,7 @@ public class UserService {
                 userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
                 userCard.setDescription(user.getDescription());
                 userCard.setPortrait(user.getPortrait());
+                //判读是否已经关注
                 if(juadeIsFollow(id,user.getId()) != 0)
                     userCard.setIfFollow(1);
                 else

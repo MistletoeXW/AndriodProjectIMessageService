@@ -16,12 +16,7 @@ public class UserMapperTest {
 
     @Test
     public void insert() {
-        User user = new User();
-        user.setName("user");
-        user.setPassword("user");
-        user.setPhone("123");
-        user.setSex(1);
-        userMapper.insert(user);
+        System.out.print(userMapper.selectByName("user1"));
 
     }
 }

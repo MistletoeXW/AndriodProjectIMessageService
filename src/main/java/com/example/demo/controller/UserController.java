@@ -54,25 +54,26 @@ public class UserController {
         return userService.Follows(userId,aliasInfo.getFollowsId(),aliasInfo.getAlias());
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/id/{userId}")
     @ApiOperation(value = "根据用户Id获取某人的信息")
     public Result UserInfoById(@PathVariable("userId") String userId){
         String id = UserContext.getCurrentUser().getId();
         return userService.UserInfoById(id,userId);
     }
 
-    @GetMapping("/{phone}")
+    @GetMapping("/phone/{phone}")
     @ApiOperation(value = "根据用户手机号查询用户信息")
     public Result UserInfoByPhone(@PathVariable("phone") String phone){
         String userId = UserContext.getCurrentUser().getId();
         return userService.UserInfoByPhone(userId,phone);
     }
 
-    @GetMapping("/{name}")
-    @ApiOperation(value = "根据用户name获取某人的信息")
+    @GetMapping("/name/{name}")
+    @ApiOperation(value = "根据用户name获取某人的信息，采用模糊查询并升序排序")
     public Result UserInfoByName(@PathVariable("name") String name){
         String userId = UserContext.getCurrentUser().getId();
         return userService.UserInfoByName(userId,name);
     }
+
 
 }
