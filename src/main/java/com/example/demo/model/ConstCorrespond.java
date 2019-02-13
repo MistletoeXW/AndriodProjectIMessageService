@@ -12,4 +12,10 @@ public class ConstCorrespond {
             "男",
             "女"
     };
+
+//    public final static String[] USER_AUTHORIZATION = {
+//            "",
+//            "ROLE_USER",
+//            "ROLE_ADMIN",
+//    };
 }

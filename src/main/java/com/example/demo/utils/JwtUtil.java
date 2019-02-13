@@ -4,12 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.example.demo.utils.security.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -30,7 +32,6 @@ public class JwtUtil {
 
 
     private static final byte[] ENCODE_KEY = "imessage".getBytes();
-    private static final String TOKEN_PREFIX = "Bearer ";        // Token前缀
     private Clock clock = DefaultClock.INSTANCE;
     private static JWTVerifier jwtVerifier;
 
@@ -48,7 +49,7 @@ public class JwtUtil {
                 .withSubject(subject)
                 .sign(algorithm);
 
-        return TOKEN_PREFIX + token;
+        return token;
     }
 
     public static String parseJwt(String jwt) throws JWTVerificationException {
@@ -58,5 +59,42 @@ public class JwtUtil {
         }
         jwtVerifier.verify(jwt);
         return JWT.decode(jwt).getSubject();
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+
+        JwtUser user = (JwtUser) userDetails;
+        final String userId = getUserIdFromToken(token);
+        return (
+                userId.equals(user.getUsername())
+                        // 判断token是否过期
+                        && !isTokenExpired(token)
+        );
+    }
+
+    // 判断token是否失效
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(clock.now());
+    }
+
+    private Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public String getUserIdFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(ENCODE_KEY)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
