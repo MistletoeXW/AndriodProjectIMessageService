@@ -1,6 +1,6 @@
 package com.example.demo.model.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Group {
     private String id;
@@ -10,12 +10,12 @@ public class Group {
     private String deacription;
 
     private String picture;
-
+    
     private String ownerid;
 
-    private LocalDateTime createTime = LocalDateTime.now();
+    private Date createTime = new Date();
 
-    private LocalDateTime updateTime = LocalDateTime.now();
+    private Date updateTime = new Date();
 
     public String getId() {
         return id;
@@ -57,19 +57,19 @@ public class Group {
         this.ownerid = ownerid == null ? null : ownerid.trim();
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }

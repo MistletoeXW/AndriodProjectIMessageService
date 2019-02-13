@@ -24,9 +24,9 @@ public class User {
 
     private String pushid;
 
-    private LocalDateTime createTime = LocalDateTime.now();
+    private Date createTime = new Date();
 
-    private LocalDateTime updateTime = LocalDateTime.now();
+    private Date updateTime = new Date();
 
     public String getId() {
         return id;
@@ -108,19 +108,19 @@ public class User {
         this.pushid = pushid == null ? null : pushid.trim();
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 }
