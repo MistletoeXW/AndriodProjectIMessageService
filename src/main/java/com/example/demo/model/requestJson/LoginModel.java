@@ -9,7 +9,8 @@ import lombok.Data;
  * @create: 2019-02-12 22:55
  **/
 @Data
-public class LoginInfo {
+public class LoginModel {
     private String phone;
     private String password;
+    private String pushId;
 }

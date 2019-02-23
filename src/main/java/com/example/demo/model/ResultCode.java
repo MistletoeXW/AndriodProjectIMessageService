@@ -6,13 +6,13 @@ package com.example.demo.model;
  * @author: ggmr
  * @create: 2018-07-29 13:05
  */
-public enum ResultCode {
+public class ResultCode {
     /**
      * 请求成功
      */
-    SUCCESS,
+    public static final Integer SUCCESS = 1;
     /**
      * 请求失败
      */
-    FAILED
+    public static final Integer FAILED = 0;
 }

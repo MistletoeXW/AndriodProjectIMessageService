@@ -5,14 +5,18 @@ import com.example.demo.dao.UserMapper;
 import com.example.demo.model.ConstCorrespond;
 import com.example.demo.model.Result;
 import com.example.demo.model.entity.User;
+import com.example.demo.model.entity.UserExample;
 import com.example.demo.model.entity.UserFollow;
 import com.example.demo.model.entity.UserFollowExample;
-import com.example.demo.model.requestJson.LoginInfo;
-import com.example.demo.model.requestJson.RegisterInfo;
+import com.example.demo.model.requestJson.LoginModel;
+import com.example.demo.model.requestJson.RegisterModel;
+import com.example.demo.model.requestJson.UserUpdateModel;
+import com.example.demo.model.responseJson.AccountRspModel;
 import com.example.demo.model.responseJson.UserCard;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.ResultTool;
 import com.example.demo.utils.TextUtil;
+import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,46 +38,58 @@ public class UserService {
     private UserFollowMapper userFollowMapper;
 
     //用户注册信息
-    public Result register(RegisterInfo registerInfo){
+    public Result register(RegisterModel registerModel){
         try{
-            User user = new User();
-            user.setName(registerInfo.getName());
-            user.setPassword(TextUtil.getMD5(registerInfo.getPassword()));
-            user.setPhone(registerInfo.getPhone());
-            user.setSex(registerInfo.getSex());
-            user.setDescription(registerInfo.getDescription());
-            user.setPortrait(registerInfo.getPortrait());
+            com.example.demo.model.entity.User user = new com.example.demo.model.entity.User();
+            user.setName(registerModel.getName());
+            user.setPassword(TextUtil.getMD5(registerModel.getPassword()));
+            user.setPhone(registerModel.getPhone());
+//            userCard.setSex(registerModel.getSex());
+//            userCard.setDescription(registerModel.getDescription());
             userMapper.insert(user);
-            return ResultTool.success();
+            return ResultTool.success(null);
         }catch (Exception e){
             return ResultTool.error("注册失败！");
         }
     }
 
     //用户登录
-    public Result login(LoginInfo loginInfo){
+    public Result login(LoginModel loginModel){
         try{
-            if(loginInfo == null || loginInfo.getPhone()==null || loginInfo.getPassword() == null){
+            if(loginModel == null || loginModel.getPhone()==null || loginModel.getPassword() == null){
                 return ResultTool.error("登录账号和密码不能为空!");
             }
-            User user = userMapper.selectByPhone(loginInfo.getPhone());
+            User user = userMapper.selectByPhone(loginModel.getPhone());
             if(user == null){
                 return ResultTool.error("您还没注册，请注册后再登录！");
             }
             else{
-                String password = TextUtil.getMD5(loginInfo.getPassword());
+                String password = TextUtil.getMD5(loginModel.getPassword());
                 if(user.getPassword().equals(password)){
+                    user.setPushid(loginModel.getPushId());
                     user.setToken(JwtUtil.createJwt(user.getId()));
                     userMapper.updateByPrimaryKey(user);
                     UserCard userCard = new UserCard();
                     userCard.setId(user.getId());
                     userCard.setName(user.getName());
                     userCard.setPhone(user.getPhone());
-                    userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
+                    if(user.getSex() != null){
+                        userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
+                    }else {
+                        userCard.setSex(null);
+                    }
                     userCard.setDescription(user.getDescription());
                     userCard.setPortrait(user.getPortrait());
                     userCard.setToken(user.getToken());
-                    return ResultTool.success(userCard);
+                    AccountRspModel accountRspModel = new AccountRspModel();
+                    accountRspModel.setUser(userCard);
+                    accountRspModel.setPhone(user.getPhone());
+                    accountRspModel.setToken(user.getToken());
+                    if(user.getPushid() == null)
+                        accountRspModel.setIsBind(false);
+                    else
+                        accountRspModel.setIsBind(true);
+                    return ResultTool.success(accountRspModel);
                 }else{
                     return ResultTool.error("账号密码错误，请重新登录！");
                 }
@@ -83,25 +99,56 @@ public class UserService {
         }
     }
 
-//    /**
-//     * 给当前的账户绑定PushId
-//     *
-//     * @param userId   自己的UserId
-//     * @param pushId 自己设备的PushId
-//     * @return User
-//     */
-//    public Result bindPushId(String userId, String pushId){
-//        if (Strings.isNullOrEmpty(pushId))
-//            return ResultTool.error("当前登录设备号获取失败");
-//
-//        // 第一步，查询是否有其他账户绑定了这个设备
-//        // 取消绑定，避免推送混乱
-//        // 查询的列表不能包括自己
-//        UserExample example = new UserExample();
-//        example.createCriteria()
-//                .andPushidEqualTo(pushId)
-//                .andIdNotEqualTo(userId);
-//    }
+    /**
+     * 给当前的账户绑定PushId
+     *
+     * @param userId   自己的UserId
+     * @param pushId 自己设备的PushId
+     * @return UserCard
+     */
+    public Result bindPushId(String userId, String pushId){
+        try {
+            if (Strings.isNullOrEmpty(pushId))
+                return ResultTool.error("当前登录设备号获取失败");
+
+            // 第一步，查询是否有其他账户绑定了这个设备
+            // 取消绑定，避免推送混乱
+            // 查询的列表不能包括自己
+            UserExample example = new UserExample();
+            example.createCriteria()
+                    .andPushidEqualTo(pushId)
+                    .andIdNotEqualTo(userId);
+            List<User> userList = userMapper.selectByExample(example);
+            if (userList.size() != 0) {
+                for (User user : userList) {
+                    user.setPushid(null);
+                    userMapper.updateByPrimaryKey(user);
+                }
+            }
+            //用户绑定pushId
+            User user = userMapper.selectByPrimaryKey(userId);
+            user.setPushid(pushId);
+            userMapper.updateByPrimaryKey(user);
+            return ResultTool.success();
+        }catch (Exception e){
+            return ResultTool.error("绑定失败！");
+        }
+    }
+
+    //用户更新信息
+    public Result updateUserInfo(String userId, UserUpdateModel userUpdateModel){
+        try{
+            User user = userMapper.selectByPrimaryKey(userId);
+            user.setName(userUpdateModel.getName());
+            user.setSex(userUpdateModel.getSex());
+            user.setPortrait(userUpdateModel.getPortrait());
+            user.setDescription(userUpdateModel.getDesc());
+            userMapper.updateByPrimaryKey(user);
+            return ResultTool.success();
+        }catch (Exception e){
+            return ResultTool.error("更新信息失败");
+        }
+    }
 
     //找到用户关注的人信息
     public Result contacts(String userId){
@@ -110,7 +157,7 @@ public class UserService {
             example.createCriteria()
                     .andOriginidEqualTo(userId);
             List<UserFollow> userFollowList = userFollowMapper.selectByExample(example);
-            List<UserCard> userFollowsCard = new ArrayList<>();
+            List<UserCard> userCardFollowsCard = new ArrayList<>();
             if(userFollowList.size() == 0)
                 return ResultTool.error("您当前没有关注的用户！");
             for (UserFollow userFollow : userFollowList) {
@@ -122,10 +169,10 @@ public class UserService {
                 userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
                 userCard.setDescription(user.getDescription());
                 userCard.setPortrait(user.getPortrait());
-                userCard.setIfFollow(1);
-                userFollowsCard.add(userCard);
+                userCard.setIsFollow(1);
+                userCardFollowsCard.add(userCard);
             }
-            return ResultTool.success(userFollowsCard);
+            return ResultTool.success(userCardFollowsCard);
         }catch (Exception e){
             return ResultTool.error("查询失败！");
         }
@@ -152,7 +199,6 @@ public class UserService {
     public Result Follows(String userId, String followId, String alias){
         try{
             //首先判断是否已经关注
-
             if(juadeIsFollow(userId,followId) != 0)
                 return ResultTool.error("您已经关注过此用户！");
             //用户添加的同时添加的用户也要关注此用户，数据库中插入两条数据
@@ -177,7 +223,7 @@ public class UserService {
      */
     public Result UserInfoById(String id, String userId){
         try{
-            User user = userMapper.selectByPrimaryKey(userId);
+            com.example.demo.model.entity.User user = userMapper.selectByPrimaryKey(userId);
             if (user == null)
                 return ResultTool.error("没有此用户！");
             UserCard userCard = new UserCard();
@@ -188,9 +234,9 @@ public class UserService {
             userCard.setDescription(user.getDescription());
             userCard.setPortrait(user.getPortrait());
             if(juadeIsFollow(id,user.getId()) != 0)
-                userCard.setIfFollow(1);
+                userCard.setIsFollow(1);
             else
-                userCard.setIfFollow(0);
+                userCard.setIsFollow(0);
             return ResultTool.success(user);
         }catch (Exception e){
             return ResultTool.error("查询失败，服务器异常！");
@@ -202,7 +248,7 @@ public class UserService {
      */
     public Result UserInfoByPhone(String userId,String phone){
         try{
-            User user = userMapper.selectByPhone(phone);
+            com.example.demo.model.entity.User user = userMapper.selectByPhone(phone);
             if (user == null)
                 return ResultTool.error("没有此用户！");
             UserCard userCard = new UserCard();
@@ -214,9 +260,9 @@ public class UserService {
             userCard.setPortrait(user.getPortrait());
             //判断是否已经关注
             if(juadeIsFollow(userId,user.getId()) != 0)
-                userCard.setIfFollow(1);
+                userCard.setIsFollow(1);
             else
-                userCard.setIfFollow(0);
+                userCard.setIsFollow(0);
             return ResultTool.success(userCard);
         }catch (Exception e){
             return ResultTool.error("查询失败，服务器异常！");
@@ -228,11 +274,11 @@ public class UserService {
      */
     public Result UserInfoByName(String id, String name){
         try{
-            List<User> userList = userMapper.selectByName(name);
+            List<com.example.demo.model.entity.User> userList = userMapper.selectByName(name);
             if (userList == null)
                 return ResultTool.error("没有此用户！");
-            List<UserCard> userCardList = new ArrayList<>();
-            for(User user : userList){
+            List<UserCard> userCardCardList = new ArrayList<>();
+            for(com.example.demo.model.entity.User user : userList){
                 UserCard userCard = new UserCard();
                 userCard.setId(user.getId());
                 userCard.setName(user.getName());
@@ -242,13 +288,13 @@ public class UserService {
                 userCard.setPortrait(user.getPortrait());
                 //判读是否已经关注
                 if(juadeIsFollow(id,user.getId()) != 0)
-                    userCard.setIfFollow(1);
+                    userCard.setIsFollow(1);
                 else
-                    userCard.setIfFollow(0);
-                userCardList.add(userCard);
+                    userCard.setIsFollow(0);
+                userCardCardList.add(userCard);
             }
 
-            return ResultTool.success(userCardList);
+            return ResultTool.success(userCardCardList);
         }catch (Exception e){
             return ResultTool.error("查询失败，服务器异常！");
         }

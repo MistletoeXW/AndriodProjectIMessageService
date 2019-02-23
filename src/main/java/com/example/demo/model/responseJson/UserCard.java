@@ -12,7 +12,6 @@ import java.util.Date;
  * @create: 2019-02-12 17:07
  **/
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserCard {
     private String id;
 
@@ -34,5 +33,5 @@ public class UserCard {
 
     private Integer follows;//用户关注的数量
 
-    private Integer ifFollow;//当前用户是否已经关注了此用户
+    private Integer isFollow;//当前用户是否已经关注了此用户
 }

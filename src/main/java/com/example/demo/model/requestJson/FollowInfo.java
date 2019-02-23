@@ -9,7 +9,7 @@ import lombok.Data;
  * @create: 2019-02-13 15:54
  **/
 @Data
-public class AliasInfo {
-    private String FollowsId;
+public class FollowInfo {
     private String alias;
+    private String followId;
 }

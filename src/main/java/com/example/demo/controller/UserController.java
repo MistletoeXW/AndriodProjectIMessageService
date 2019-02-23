@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Result;
-import com.example.demo.model.requestJson.AliasInfo;
-import com.example.demo.model.requestJson.LoginInfo;
-import com.example.demo.model.requestJson.RegisterInfo;
+import com.example.demo.model.requestJson.FollowInfo;
+import com.example.demo.model.requestJson.LoginModel;
+import com.example.demo.model.requestJson.RegisterModel;
+import com.example.demo.model.requestJson.UserUpdateModel;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.ResultTool;
 import com.example.demo.utils.security.UserContext;
@@ -28,14 +29,14 @@ public class UserController {
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
-    public Result Register(@RequestBody RegisterInfo registerInfo){
-        return userService.register(registerInfo);
+    public Result Register(@RequestBody RegisterModel registerModel){
+        return userService.register(registerModel);
     }
 
     @PostMapping("/login")
     @ApiOperation(value = "用户登录")
-    public Result Login(@RequestBody LoginInfo loginInfo){
-        return userService.login(loginInfo);
+    public Result Login(@RequestBody LoginModel loginModel){
+        return userService.login(loginModel);
     }
 
     @GetMapping("/Followings")
@@ -47,11 +48,25 @@ public class UserController {
 
     @PostMapping("/Follows")
     @ApiOperation(value = "用户添加关注人")
-    public Result Follows(@RequestBody AliasInfo aliasInfo){
+    public Result Follows(@RequestBody FollowInfo aliasInfo){
         String userId = UserContext.getCurrentUser().getId();
-        if(userId.equalsIgnoreCase(aliasInfo.getFollowsId()))
+        if(userId.equalsIgnoreCase(aliasInfo.getFollowId()))
             return ResultTool.error("不能关注自己!");
-        return userService.Follows(userId,aliasInfo.getFollowsId(),aliasInfo.getAlias());
+        return userService.Follows(userId,aliasInfo.getFollowId(),aliasInfo.getAlias());
+    }
+
+    @PostMapping("/bind/{pushId}")
+    @ApiOperation(value = "绑定设备Id")
+    public Result bindPushId(@PathVariable("pushId") String pushId){
+        String id = UserContext.getCurrentUser().getId();
+        return userService.bindPushId(id,pushId);
+    }
+
+    @PostMapping("/updateUserInfo")
+    @ApiOperation(value = "用户更新信息")
+    public Result updateUserInfo(@RequestBody UserUpdateModel userUpdateModel){
+        String id = UserContext.getCurrentUser().getId();
+        return userService.updateUserInfo(id,userUpdateModel);
     }
 
     @GetMapping("/id/{userId}")
@@ -74,6 +89,7 @@ public class UserController {
         String userId = UserContext.getCurrentUser().getId();
         return userService.UserInfoByName(userId,name);
     }
+
 
 
 }

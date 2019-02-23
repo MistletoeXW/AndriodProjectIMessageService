@@ -67,12 +67,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
         }
 
-        logger.info("checking authentication for user '{}'", userId);
+        logger.info("checking authentication for userCard '{}'", userId);
 
         boolean saved = false;
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.info("security context was null, so authorization user");
+            logger.info("security context was null, so authorization userCard");
 
             UserDetails userDetails = myUserDetailService.loadUserByUsername(userId);
 
@@ -80,13 +80,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("authorized user '{}', setting security context", userId);
+                logger.info("authorized userCard '{}', setting security context", userId);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String userIdFromToken = jwtUtil.getUserIdFromToken(token);
                 User user = userMapper.selectByPrimaryKey(userIdFromToken);
                 try (UserContext ignored = new UserContext(user)) {
                     //之所以这样写是为了有一个线程级别的一个tokne的信息，然后方便我去操作
-                    logger.info("authorized user '{}', saving security context", userId);
+                    logger.info("authorized userCard '{}', saving security context", userId);
                     saved = true;
                     chain.doFilter(request, response);
                 }

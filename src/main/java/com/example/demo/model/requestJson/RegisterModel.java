@@ -9,11 +9,9 @@ import lombok.Data;
  * @create: 2019-02-12 16:50
  **/
 @Data
-public class RegisterInfo {
+public class RegisterModel {
     private String name;
     private String password;
     private String phone;
-    private Integer sex;
-    private String description;  //描述
-    private String portrait; //头像
+    private String pushId;
 }
