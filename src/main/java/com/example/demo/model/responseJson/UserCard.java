@@ -19,9 +19,9 @@ public class UserCard {
 
     private String phone;
 
-    private String sex;
+    private int sex;
 
-    private String description;
+    private String desc;
 
     private String portrait;
 
@@ -33,5 +33,5 @@ public class UserCard {
 
     private Integer follows;//用户关注的数量
 
-    private Integer isFollow;//当前用户是否已经关注了此用户
+    private Boolean isFollow;//当前用户是否已经关注了此用户
 }

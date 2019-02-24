@@ -20,8 +20,8 @@ public class UserMapperTest {
     @Test
     public void insert() {
         System.out.print(userService
-                .juadeIsFollow("c286d6712ed411e982528c16454dcfe6"
-                        ,"9299d0192f9c11e9a2d38c16454dcfe6"));
+                .UserInfoById("c0ce68cc335511e980dd8c16454dcfe6"
+                        ,"c286d6712ed411e982528c16454dcfe6"));
 
     }
 }

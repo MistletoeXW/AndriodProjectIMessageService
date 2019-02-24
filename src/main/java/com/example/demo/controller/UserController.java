@@ -5,6 +5,7 @@ import com.example.demo.model.requestJson.FollowInfo;
 import com.example.demo.model.requestJson.LoginModel;
 import com.example.demo.model.requestJson.RegisterModel;
 import com.example.demo.model.requestJson.UserUpdateModel;
+import com.example.demo.model.responseJson.UserCard;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.ResultTool;
 import com.example.demo.utils.security.UserContext;
@@ -46,13 +47,13 @@ public class UserController {
         return userService.contacts(userId);
     }
 
-    @PostMapping("/Follows")
+    @PostMapping("/Follows/{userId}")
     @ApiOperation(value = "用户添加关注人")
-    public Result Follows(@RequestBody FollowInfo aliasInfo){
+    public Result Follows(@PathVariable("userId")String followId){
         String userId = UserContext.getCurrentUser().getId();
-        if(userId.equalsIgnoreCase(aliasInfo.getFollowId()))
+        if(userId.equalsIgnoreCase(followId))
             return ResultTool.error("不能关注自己!");
-        return userService.Follows(userId,aliasInfo.getFollowId(),aliasInfo.getAlias());
+        return userService.Follows(userId,followId);
     }
 
     @PostMapping("/bind/{pushId}")
@@ -69,25 +70,32 @@ public class UserController {
         return userService.updateUserInfo(id,userUpdateModel);
     }
 
-    @GetMapping("/id/{userId}")
+    @GetMapping("/{userId}")
     @ApiOperation(value = "根据用户Id获取某人的信息")
     public Result UserInfoById(@PathVariable("userId") String userId){
         String id = UserContext.getCurrentUser().getId();
-        return userService.UserInfoById(id,userId);
+        try{
+            UserCard userCard = userService.UserInfoById(id,userId);
+            return ResultTool.success(userCard);
+        }catch (Exception e){
+            return ResultTool.error();
+        }
     }
 
-    @GetMapping("/phone/{phone}")
+    @GetMapping("/search/phone/{phone}")
     @ApiOperation(value = "根据用户手机号查询用户信息")
     public Result UserInfoByPhone(@PathVariable("phone") String phone){
         String userId = UserContext.getCurrentUser().getId();
         return userService.UserInfoByPhone(userId,phone);
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping(value = {"/search/name/{name}","/search/name/"})
     @ApiOperation(value = "根据用户name获取某人的信息，采用模糊查询并升序排序")
-    public Result UserInfoByName(@PathVariable("name") String name){
+    public Result UserInfoByName(@PathVariable(required = false) String name){
         String userId = UserContext.getCurrentUser().getId();
-        return userService.UserInfoByName(userId,name);
+        Result result = userService.UserInfoByName(userId,name);
+        System.out.print(result.toString());
+        return result;
     }
 
 

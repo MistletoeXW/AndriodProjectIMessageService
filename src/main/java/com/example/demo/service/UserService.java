@@ -73,12 +73,8 @@ public class UserService {
                     userCard.setId(user.getId());
                     userCard.setName(user.getName());
                     userCard.setPhone(user.getPhone());
-                    if(user.getSex() != null){
-                        userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
-                    }else {
-                        userCard.setSex(null);
-                    }
-                    userCard.setDescription(user.getDescription());
+                    userCard.setSex(user.getSex());
+                    userCard.setDesc(user.getDescription());
                     userCard.setPortrait(user.getPortrait());
                     userCard.setToken(user.getToken());
                     AccountRspModel accountRspModel = new AccountRspModel();
@@ -166,10 +162,10 @@ public class UserService {
                 userCard.setId(user.getId());
                 userCard.setName(user.getName());
                 userCard.setPhone(user.getPhone());
-                userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
-                userCard.setDescription(user.getDescription());
+                userCard.setSex(user.getSex());
+                userCard.setDesc(user.getDescription());
                 userCard.setPortrait(user.getPortrait());
-                userCard.setIsFollow(1);
+                userCard.setIsFollow(true);
                 userCardFollowsCard.add(userCard);
             }
             return ResultTool.success(userCardFollowsCard);
@@ -196,7 +192,7 @@ public class UserService {
     /**
      * 用户添加关注人
      */
-    public Result Follows(String userId, String followId, String alias){
+    public Result Follows(String userId, String followId){
         try{
             //首先判断是否已经关注
             if(juadeIsFollow(userId,followId) != 0)
@@ -205,13 +201,15 @@ public class UserService {
             UserFollow userFollow = new UserFollow();
             userFollow.setOriginid(userId);
             userFollow.setTargetid(followId);
-            userFollow.setAlias(alias);//添加备注
+            //userFollow.setAlias(alias);//添加备注
             UserFollow userFollow1 = new UserFollow();
             userFollow1.setOriginid(followId);
             userFollow1.setTargetid(userId);
             userFollowMapper.insert(userFollow);
             userFollowMapper.insert(userFollow1);
-            return ResultTool.success();
+            UserCard userCard = UserInfoById(userId,followId);
+            userCard.setIsFollow(true);
+            return ResultTool.success(userCard);
         }catch (Exception e){
             return ResultTool.error("关注失败，请联系管理员！");
         }
@@ -221,26 +219,20 @@ public class UserService {
     /**
      * 根据userId获取用户信息
      */
-    public Result UserInfoById(String id, String userId){
-        try{
-            com.example.demo.model.entity.User user = userMapper.selectByPrimaryKey(userId);
-            if (user == null)
-                return ResultTool.error("没有此用户！");
-            UserCard userCard = new UserCard();
-            userCard.setId(user.getId());
-            userCard.setName(user.getName());
-            userCard.setPhone(user.getPhone());
-            userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
-            userCard.setDescription(user.getDescription());
-            userCard.setPortrait(user.getPortrait());
-            if(juadeIsFollow(id,user.getId()) != 0)
-                userCard.setIsFollow(1);
-            else
-                userCard.setIsFollow(0);
-            return ResultTool.success(user);
-        }catch (Exception e){
-            return ResultTool.error("查询失败，服务器异常！");
-        }
+    public UserCard UserInfoById(String id, String userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        UserCard userCard = new UserCard();
+        userCard.setId(user.getId());
+        userCard.setName(user.getName());
+        userCard.setPhone(user.getPhone());
+        userCard.setSex(user.getSex());
+        userCard.setDesc(user.getDescription());
+        userCard.setPortrait(user.getPortrait());
+        if(juadeIsFollow(id,user.getId()) != 0)
+            userCard.setIsFollow(true);
+        else
+            userCard.setIsFollow(false);
+        return userCard;
     }
 
     /**
@@ -255,14 +247,14 @@ public class UserService {
             userCard.setId(user.getId());
             userCard.setName(user.getName());
             userCard.setPhone(user.getPhone());
-            userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
-            userCard.setDescription(user.getDescription());
+            userCard.setSex(user.getSex());
+            userCard.setDesc(user.getDescription());
             userCard.setPortrait(user.getPortrait());
             //判断是否已经关注
             if(juadeIsFollow(userId,user.getId()) != 0)
-                userCard.setIsFollow(1);
+                userCard.setIsFollow(true);
             else
-                userCard.setIsFollow(0);
+                userCard.setIsFollow(false);
             return ResultTool.success(userCard);
         }catch (Exception e){
             return ResultTool.error("查询失败，服务器异常！");
@@ -274,23 +266,29 @@ public class UserService {
      */
     public Result UserInfoByName(String id, String name){
         try{
-            List<com.example.demo.model.entity.User> userList = userMapper.selectByName(name);
-            if (userList == null)
-                return ResultTool.error("没有此用户！");
+            List<User> userList = new ArrayList<>();
+            if(name != null){
+                userList = userMapper.selectByName(name);
+            }else{
+                UserExample example = new UserExample();
+                example.createCriteria()
+                        .andIdIsNotNull();
+                userList = userMapper.selectByExample(example);
+            }
             List<UserCard> userCardCardList = new ArrayList<>();
             for(com.example.demo.model.entity.User user : userList){
                 UserCard userCard = new UserCard();
                 userCard.setId(user.getId());
                 userCard.setName(user.getName());
                 userCard.setPhone(user.getPhone());
-                userCard.setSex(ConstCorrespond.SEX_TPYE[user.getSex()]);
-                userCard.setDescription(user.getDescription());
+                userCard.setSex(user.getSex());
+                userCard.setDesc(user.getDescription());
                 userCard.setPortrait(user.getPortrait());
                 //判读是否已经关注
                 if(juadeIsFollow(id,user.getId()) != 0)
-                    userCard.setIsFollow(1);
+                    userCard.setIsFollow(true);
                 else
-                    userCard.setIsFollow(0);
+                    userCard.setIsFollow(false);
                 userCardCardList.add(userCard);
             }
 
