@@ -19,7 +19,7 @@ public class PushHistory {
 
     private Date updateTime = new Date();
 
-    private byte[] entity;
+    private String entity;
 
     public String getId() {
         return id;
@@ -85,11 +85,11 @@ public class PushHistory {
         this.updateTime = updateTime;
     }
 
-    public byte[] getEntity() {
+    public String getEntity() {
         return entity;
     }
 
-    public void setEntity(byte[] entity) {
+    public void setEntity(String entity) {
         this.entity = entity;
     }
 }

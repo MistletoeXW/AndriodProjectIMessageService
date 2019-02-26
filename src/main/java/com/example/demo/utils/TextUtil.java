@@ -1,5 +1,7 @@
 package com.example.demo.utils;
 
+import com.example.demo.utils.getui.GsonProvider;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.Base64;
@@ -40,6 +42,16 @@ public class TextUtil {
         return Base64
                 .getEncoder()
                 .encodeToString(str.getBytes());
+    }
+
+    /**
+     * 把任意类的实例转换为Json字符串
+     *
+     * @param obj Object
+     * @return Json字符串
+     */
+    public static String toJson(Object obj) {
+        return GsonProvider.getGson().toJson(obj);
     }
 }
 

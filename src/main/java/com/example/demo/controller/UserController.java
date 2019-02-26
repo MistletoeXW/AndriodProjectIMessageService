@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.UserMapper;
+import com.example.demo.model.PushModel;
 import com.example.demo.model.Result;
-import com.example.demo.model.requestJson.FollowInfo;
-import com.example.demo.model.requestJson.LoginModel;
-import com.example.demo.model.requestJson.RegisterModel;
-import com.example.demo.model.requestJson.UserUpdateModel;
+import com.example.demo.model.entity.User;
+import com.example.demo.model.requestJson.*;
 import com.example.demo.model.responseJson.UserCard;
+import com.example.demo.service.MessageService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.ResultTool;
+import com.example.demo.utils.getui.PushDispatcher;
 import com.example.demo.utils.security.UserContext;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ import javax.annotation.Resource;
 public class UserController {
     @Resource
     private UserService userService;
+    @Resource
+    private UserMapper userMapper;
 
     @PostMapping("/register")
     @ApiOperation(value = "用户注册")
@@ -44,6 +48,7 @@ public class UserController {
     @ApiOperation(value = "获取用户关注人的列表")
     public Result ContactList(){
         String userId = UserContext.getCurrentUser().getId();
+
         return userService.contacts(userId);
     }
 
@@ -97,6 +102,8 @@ public class UserController {
         System.out.print(result.toString());
         return result;
     }
+
+
 
 
 

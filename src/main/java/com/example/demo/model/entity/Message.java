@@ -3,6 +3,17 @@ package com.example.demo.model.entity;
 import java.util.Date;
 
 public class Message {
+
+    // 发送给人的
+    public static final int RECEIVER_TYPE_NONE = 1;
+    // 发送给群的
+    public static final int RECEIVER_TYPE_GROUP = 2;
+
+    public static final int TYPE_STR = 1; // 字符串类型
+    public static final int TYPE_PIC = 2; // 图片类型
+    public static final int TYPE_FILE = 3; // 文件类型
+    public static final int TYPE_AUDIO = 4; // 语音类型
+
     private String id;
 
     private String attach;
